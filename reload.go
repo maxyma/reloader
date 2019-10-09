@@ -16,7 +16,7 @@ import (
 
 1.`HTTP Server`简单用法：
 func main(){
-    rl := NewReloader("127.0.0.1:8080")
+    rl := reloader.NewReloader("127.0.0.1:8080")
     if err:=rl.Bind(); err==nil {
         http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
             w.Write([]byte("Hello, world!\n"))
@@ -27,11 +27,12 @@ func main(){
 
 2.socket server用法
 func main(){
-    rl := NewReloader("127.0.0.1:9001")
+    rl := reloader.NewReloader("127.0.0.1:9001")
     if err:=rl.Bind(); err==nil {
-        http.Serve(rl.GetListener(), func(w http.ResponseWriter, req *http.Request) {
+        http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
             w.Write([]byte("Hello, world!\n"))
         })
+        http.Serve(rl.GetListener(), nil)
         rl.Wait()
     }
 }
